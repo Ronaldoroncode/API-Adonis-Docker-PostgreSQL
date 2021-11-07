@@ -1,17 +1,40 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import File from 'App/Models/File'
+import { StoreValidator, UpdateValidator} from 'App/Validators/File'
 
 export default class FilesController {
-  public async index({}: HttpContextContract) {}
+  public async index({}: HttpContextContract) {
+    const files = await File.all()
 
-  public async create({}: HttpContextContract) {}
+    return files
+  } 
 
-  public async store({}: HttpContextContract) {}
+  public async store({ request }: HttpContextContract) {
+    const data = await request.validate(StoreValidator)
+    const file = await File.create(data)
 
-  public async show({}: HttpContextContract) {}
+    return file
+  }
 
-  public async edit({}: HttpContextContract) {}
+  public async show({ params }: HttpContextContract) {
+    const file = await File.findOrFail(params.id)
 
-  public async update({}: HttpContextContract) {}
+    return file
+  }
 
-  public async destroy({}: HttpContextContract) {}
+  public async update({ request, params }: HttpContextContract) {
+    const file = await File.findOrFail(params.id)
+    const data = await request.validate(UpdateValidator)
+
+    file.merge(data)
+    await file.save()
+
+    return file
+  }
+
+  public async destroy({ params }: HttpContextContract) {
+    const file = await File.findOrFail(params.id)
+
+    await file.delete()
+  }
 }
