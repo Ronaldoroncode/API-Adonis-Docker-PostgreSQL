@@ -23,3 +23,7 @@ $ npm run dev
 # build for production and launch server
 $ npm run build
 $ npm run start
+
+#Autentication User:
+email: 'roncodeit@gmail.com',
+      password: 'ron123'
